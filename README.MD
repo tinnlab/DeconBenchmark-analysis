@@ -68,9 +68,9 @@ attached base packages:
 [1] parallel  stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] RcppHungarian_0.2  rhdf5_2.38.1       babelwhale_1.1.0   SeuratObject_4.1.3 Seurat_4.3.0       lubridate_1.9.2   
- [7] forcats_1.0.0      stringr_1.5.0      dplyr_1.1.0        purrr_1.0.1        readr_2.1.4        tidyr_1.3.0       
-[13] tibble_3.1.8       ggplot2_3.4.1      tidyverse_2.0.0   
+ [1] edgeR_3.36.0       limma_3.50.3       RcppHungarian_0.2  rhdf5_2.38.1       babelwhale_1.1.0   SeuratObject_4.1.3
+ [7] Seurat_4.3.0       lubridate_1.9.2    forcats_1.0.0      stringr_1.5.0      dplyr_1.1.0        purrr_1.0.1       
+[13] readr_2.1.4        tidyr_1.3.0        tibble_3.1.8       ggplot2_3.4.1      tidyverse_2.0.0   
 
 loaded via a namespace (and not attached):
   [1] Rtsne_0.16             colorspace_2.1-0       deldir_1.0-6           ellipsis_0.3.2         ggridges_0.5.4        
