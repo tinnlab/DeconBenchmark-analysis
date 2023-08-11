@@ -1,6 +1,6 @@
 This repository contains code to reproduce the benchmarking results in the article "Twelve Years of Cellular Deconvolution: Applications, Benchmark, Methodology, and Challenges".
 
-For standalone R package to run deconvolution methods, visit http://deconvolution.us.to/gitlab/deconvolution/benchmark.
+For standalone R package to run deconvolution methods, visit https://github.com/tinnlab/DeconBenchmark.
 
 To get started, follow the steps below:
 
@@ -12,7 +12,7 @@ download the `rds` file of `Tabula Sapiens - All Cells`, rename it to `local.rds
    All prebuilt docker images can be found at https://hub.docker.com/u/deconvolution.
    Docker will automatically pull the images when running the scripts below.
    However, CIBERSORT has a specific license requirement and is not available on docker hub.
-   Please visit http://deconvolution.us.to/gitlab/deconvolution/docker to read more about how to build the CIBERSORT docker image
+   Please visit https://github.com/tinnlab/DeconBenchmark-docker to read more about how to build the CIBERSORT docker image
    and any other method.
 4. Using `R` version >= 4.0.0, run the following commands to install necessary packages used in the analysis:
 ```r
