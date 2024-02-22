@@ -1,54 +1,89 @@
-This repository contains code to reproduce the benchmarking results in the article "Twelve Years of Cellular Deconvolution: Applications, Benchmark, Methodology, and Challenges".
+This repository contains code to reproduce the benchmarking results in the article "Fourteen Years of Cellular Deconvolution: Applications, Benchmark, Methodology, and Challenges".
 
-For standalone R package to run deconvolution methods, visit https://github.com/tinnlab/DeconBenchmark.
+For installing the standalone R package to run deconvolution methods, visit https://github.com/tinnlab/DeconBenchmark.
 
 To get started, follow the steps below:
 
 1. Clone this repository
-2. Go to https://cellxgene.cziscience.com/collections/e5f58829-1a66-40b5-a624-9046778e74f5, 
-download the `rds` file of `Tabula Sapiens - All Cells`, rename it to `local.rds` and place it in the `data` directory.
-3. Install docker:
+2. Create a `./data` folder in this repository
+3. Download the data from our Zenodo repositories and save them under `./data` folder:
+- For Tabula Sapiens: https://zenodo.org/doi/10.5281/zenodo.10687798
+- For CELLxGENE: https://zenodo.org/doi/10.5281/zenodo.10688809
+
+**_NOTE 01:_** Users can download the data from CELLxGENE database directly.The following table provides the list of datasets that we used in our analysis. Users can manually download the data by clicking to the link in the `Download URL` column. We also provides the URLs for users to explore the dataset, and the note on choosing the right dataset used in our analysis.
+
+**_NOTE 02:_** Please notice that these data are updated regularly, thus, it may make the repoduced results slightly different to the data deposited on Zenodo.
+
+| Dataset                      | URL                                                                                | Download URL                                                                       | Note                                                  |
+|------------------------------|------------------------------------------------------------------------------------|------------------------------------------------------------------------------------|-------------------------------------------------------|
+| Tabula Sapiens               | https://cellxgene.cziscience.com/collections/e5f58829-1a66-40b5-a624-9046778e74f5  | https://datasets.cellxgene.cziscience.com/bfd80f12-725c-4482-ad7f-1ed2b4909b0d.rds | Select "Tabula Sapiens - All Cells"                                    |
+| Basal Zone of Heart          | https://cellxgene.cziscience.com/collections/43b45a20-a969-49ac-a8e8-8c84b211bd01  | https://datasets.cellxgene.cziscience.com/c3191c1c-e63e-4b9e-b539-25ac669e3c3d.rds |                                                       |
+| Fimbria of Uterine Tube      | https://cellxgene.cziscience.com/collections/d36ca85c-3e8b-444c-ba3e-a645040c6185  | https://datasets.cellxgene.cziscience.com/a83b2065-ddb0-41d6-9a46-5e1ed9a9d4ee.rds  | Select "Fallopian tube RNA"                           |
+| Primary Visual Cortex        | https://cellxgene.cziscience.com/collections/d17249d2-0e6e-4500-abb8-e6c93fa1ac6f  | https://datasets.cellxgene.cziscience.com/5b347baa-63d2-4b3e-9d17-5d51c0a3dd23.rds | Select "Dissection: Primary visual cortex(V1)"        |
+| Anterior Cingulate Cortex    | https://cellxgene.cziscience.com/collections/d17249d2-0e6e-4500-abb8-e6c93fa1ac6f  | https://datasets.cellxgene.cziscience.com/5b37a4b8-7bbd-456c-a0ba-40c78411a608.rds | Select "Dissection: Anterior cingulate cortex (ACC)"  |
+| Middle Temporal Gyrus        | https://cellxgene.cziscience.com/collections/4dca242c-d302-4dba-a68f-4c61e7bad553  | https://datasets.cellxgene.cziscience.com/fafef79b-a863-4e63-a162-dd933d552ace.rds | Select "Human: Great apes study"                      |
+| Primary Auditory Cortex      | https://cellxgene.cziscience.com/collections/d17249d2-0e6e-4500-abb8-e6c93fa1ac6f  | https://datasets.cellxgene.cziscience.com/4184721b-0a1b-4bb6-b0fb-dc0bf023acb9.rds | Select "Dissection: Primary auditory cortex(A1)"      |
+| Primary Somatosensory Cortex | https://cellxgene.cziscience.com/collections/d17249d2-0e6e-4500-abb8-e6c93fa1ac6f  | https://datasets.cellxgene.cziscience.com/173891cd-830e-4733-861e-5e8ba59973dd.rds | Select "Dissection: Primary somatosensory cortex (S1)" |
+| Liver                        | https://cellxgene.cziscience.com/collections/74e10dc4-cbb2-4605-a189-8a1cd8e44d8c  | https://datasets.cellxgene.cziscience.com/ca0b283f-d35d-45d0-91ef-91677bec2663.rds | Select "Lymphoid cells from human liver dataset"      |
+| Heart Left Ventricle         | https://cellxgene.cziscience.com/collections/e75342a8-0f3b-4ec5-8ee1-245a23e0f7cb  | https://datasets.cellxgene.cziscience.com/5b6e7a20-b1cb-415e-85cc-5d856ee1591c.rds | Select "DCM/ACM heart cell atlas: All cells" |
+| Small Intestine              | https://cellxgene.cziscience.com/collections/7651ac1a-f947-463a-9223-a9e408a41989  | https://datasets.cellxgene.cziscience.com/2c72b4d3-f7b7-4308-8b73-7c5687fd9aa9.rds ||
+
+4. Once the download is finished, each dataset is assigned to a specific ID, which can be seen by running the following command lines in R:
+
+```r
+metaFiles <- readRDS("./include/metaFiles.rds")
+metaFiles
+```
+
+5. Install docker:
    Follow instructions at https://docs.docker.com/engine/install/ to install docker.
    All prebuilt docker images can be found at https://hub.docker.com/u/deconvolution.
    Docker will automatically pull the images when running the scripts below.
    However, CIBERSORT has a specific license requirement and is not available on docker hub.
    Please visit https://github.com/tinnlab/DeconBenchmark-docker to read more about how to build the CIBERSORT docker image
    and any other method.
-4. Using `R` version >= 4.0.0, run the following commands to install necessary packages used in the analysis:
+5Using `R` version >= 4.0.0, run the following commands to install necessary packages used in the analysis:
 ```r
 if (!require("BiocManager", quietly = TRUE))
         install.packages("BiocManager")
 
 BiocManager::install(c("tidyverse", "babelwhale", "RcppHungarian", "stringr", "processx", "rhdf5", "Seurat", "edgeR"))
 ```
-5. Visit the Matlab license center at http://www.mathworks.com/licensecenter/licenses to obtain a license file.
+6. Visit the Matlab license center at http://www.mathworks.com/licensecenter/licenses to obtain a license file.
 The hostid of this license is the same as the hostid of the host machine. The user of this license must be root.
 This license is required only when running BayesCCE, Deblender, and DecOT.
 Save the license file and replace `PATH_TO_MATLAB_LICENSE` in R scripts below with the ABSOLUTE path to the license file.
-6. Run `generate-simulation-data.R` to generate simulated data.
+7. Run `generate-simulated-data-tsp.R` to generate simulated data using single cell data from Tabula Sapiens.
 All simulated data will be saved in:
-   - `data/sim` for accuracy and consistency benchmarking
+   - `data/sim-tsp` for accuracy and consistency benchmarking
    - `data/scalability` for scalability benchmarking
-7. Run `accuracy.R` to generate the accuracy results.
-All results will be saved in the `results/accuracy` directory, including:
+8. Run `generate-simulated-data-cxg.R` to generate simulated data using single cell data from CELLxGENE.
+All simulated data will be saved in:
+   - `data/sim-cxg` for accuracy benchmarking
+9. Run `accuracy-tsp.R` and `accuracy-cxg.R` to generate the accuracy results.
+All results will be saved in the `results/accuracy-tsp` and `results/accuracy-cxg` directories, respectively, including:
    - Individual predicted proportion results for each method and each tissue with format name `<method>_<tissue>.rds`.
    Each `rds` file contains a dataframe of predicted proportions, the ground truth proportions, and the running time.
    - All combined accuracies result with name `allRes.rds`. 
    This `rds` file contains a dataframe with method name, dataset name, and 4 accuracy metrics.
-8. Run `consistency.R` to generate the consistency results.
+10. Run `consistency.R` to generate the consistency results.
    All results will be saved in the `results/consistency` directory, including:
    - Individual predicted proportion results for each method and each tissue with format name `<method>_<tissue>_<seed>.rds`.
      Each `rds` file contains a dataframe of predicted proportions, the ground truth proportions, and the running time.
    - All combined accuracies result with name `allRes.rds`.
      This `rds` file contains a dataframe with method name, dataset name, sample, seed, MAE, and correlation.
-9. Run `scalability.R` to generate the scalability results.
+11. Run `scalability.R` to generate the scalability results.
 At the same time, run `memory-monitor.R` to monitor the memory usage of the running docker containers.
 All scalability results will be saved in the `results/scalability` directory, including:
    - Individual predicted proportion results for each method and each tissue with format name `<method>_<tissue>_<numberOfBulkSample>.rds`.
      Each `rds` file contains a dataframe of predicted proportions, the ground truth proportions, and the running time.
    - All combined accuracies result with name `allRes.rds`.
      This `rds` file contains a dataframe with method name, dataset name, number of bulk samples, running time, and memory usage.
-
+12. For missing cell types analysis, run `generate-simulated-data-cxg-missingCT.R` to generate simulated data using single cell data from CELLxGENE for the analysis of missing cell types in the reference.
+All simulated data will be saved in:
+   - `data/sim-cxg-missing25` for accuracy benchmarking when the reference data have 25% of cell types are missing
+   - `data/sim-cxg-missing50` for accuracy benchmarking when the reference data have 50% of cell types are missing
+13. Run `missing-celltypes-analysis-25.R` and `missing-celltypes-analysis-50.R` to generate the accuracy results in the two scenarios of missing cell types.
 
 #### Session Info
 ```

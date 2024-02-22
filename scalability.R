@@ -5,9 +5,9 @@ library(parallel)
 source('./include/utils.R')
 
 
-EX_SLOW_METHODS <- c("BayCount", "BayesCCE", "DAISM", "debCAM", "DeCompress")
-SLOW_METHODS <- c("AdRoit", "ARIC", "BayICE", "CPM", "deconf", "deconvSeq", "DecOT", "DeMixT", "digitalDLSorter", "DWLS", "EMeth", "ImmuCellAI", "Linseed", "MOMF", "NITUMID", "quanTIseq", "scaden", "spatialDWLS")
-FAST_METHODS <- c("AutoGeneS", "BisqueMarker", "BisqueRef", "CellDistinguisher", "CIBERSORT", "Deblender", "DeconICA", "DeconPeaker", "DeconRNASeq", "DESeq2", "DSA", "dtangle", "EPIC", "FARDEEP", "LinDeconSeq", "MCPcounter", "MethylResolver", "MIXTURE", "MuSic", "MySort", "PREDE", "ReFACTor", "RNA-Sieve", "SCDC", "TOAST")
+EX_SLOW_METHODS <- c("BayesCCE", "DAISM", "BayCount", "debCAM", "DeCompress", "BayesPrism")
+SLOW_METHODS <- c("EMeth", "BayICE", "deconvSeq", "CPM", "DWLS", "DESeq2", "spatialDWLS", "deconf", "DecOT", "DeMixT", "digitalDLSorter", "ImmuCellAI", "Linseed", "MOMF", "AdRoit", "NITUMID", "quanTIseq", "scaden", "ARIC")
+FAST_METHODS <- c("AutoGeneS", "BisqueMarker", "BisqueRef", "CellDistinguisher", "CIBERSORT", "Deblender", "DeconICA", "DeconPeaker", "DeconRNASeq", "DSA", "dtangle", "EPIC", "FARDEEP", "LinDeconSeq", "MCPcounter", "MethylResolver", "MIXTURE", "MuSic", "MySort", "PREDE", "ReFACTor", "RNA-Sieve", "SCDC", "TOAST", "BseqSC")
 ALL_METHODS <- c(FAST_METHODS, SLOW_METHODS, EX_SLOW_METHODS)
 
 DOCKER_TAG_PREFIX <- "deconvolution/"
@@ -19,7 +19,7 @@ nRep <- 10
 
 methods <- ALL_METHODS
 
-dataFiles <- list.files('./data/sim') %>%
+dataFiles <- list.files('./data/sim-tsp') %>%
     str_match('([^/]+).rds$') %>%
     { function(x) x[, 2] }()
 
@@ -65,14 +65,14 @@ res <- lapply(seq_len(nrow(allConfig)), function(i) {
   res$runningTime <- runningTime
 
   saveRDS(res, file = resFile)
-  
+
   res
 })
 
 # gather results
 
 methods        <- ALL_METHODS
-tissues <- list.files("./data/sim") |>
+tissues <- list.files("./data/sim-tsp") |>
     str_match('([^/]+).rds$') |>
     { \(x) x[, 2] }()
 
@@ -104,7 +104,7 @@ for (i in seq_len(nrow(allConfig))) {
     methodError <- c(methodError, method)
     next
   }
-  
+
   if (!is.null(res$stderr))
   {
     allRes      <- rbind(allRes, data.frame(method = method, tissue = tissue, nBulk = nBulk, rt = NA, mem = NA))
@@ -128,7 +128,7 @@ for (i in seq_len(nrow(allConfig))) {
       allRes <- rbind(allRes,
                       data.frame(method = method, tissue = tissue, nBulk = nBulk, rt = as.numeric(res$runningTime, units = 'secs'), mem = 0.1))
     }
-    
+
     methodValid <- c(methodValid, method)
   }
 }
