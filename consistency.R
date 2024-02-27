@@ -3,12 +3,10 @@ library(rhdf5)
 library(parallel)
 library(RcppHungarian)
 
-EX_SLOW_METHODS <- c("BayCount", "BayesCCE", "DAISM", "debCAM", "DeCompress", "EMeth")
-SLOW_METHODS <- c("AdRoit", "ARIC", "BayICE", "CPM", "deconf", "deconvSeq", "DecOT", "digitalDLSorter", "DWLS", "ImmuCellAI", "Linseed", "MOMF", "NITUMID", "quanTIseq", "scaden")
-FAST_METHODS <- c("AutoGeneS", "BisqueMarker", "CellDistinguisher", "CIBERSORT", "Deblender", "DeconICA", "DeconPeaker", "DeconRNASeq", "DESeq2", "DSA", "dtangle", "EPIC", "FARDEEP", "LinDeconSeq", "MCPcounter", "MethylResolver", "MIXTURE", "MuSic", "PREDE", "ReFACTor", "RNA-Sieve", "SCDC", "TOAST")
-MORE_METHODS <- c("BisqueRef", "DeMixT", "MySort", "spatialDWLS")
-
-ALL_METHODS <- c(FAST_METHODS, SLOW_METHODS, EX_SLOW_METHODS, MORE_METHODS)
+EX_SLOW_METHODS <- c("BayesCCE", "DAISM", "BayCount", "debCAM", "DeCompress", "BayesPrism")
+SLOW_METHODS <- c("EMeth", "BayICE", "deconvSeq", "CPM", "DWLS", "DESeq2", "spatialDWLS", "deconf", "DecOT", "DeMixT", "digitalDLSorter", "ImmuCellAI", "Linseed", "MOMF", "AdRoit", "NITUMID", "quanTIseq", "scaden", "ARIC")
+FAST_METHODS <- c("AutoGeneS", "BisqueMarker", "BisqueRef", "CellDistinguisher", "CIBERSORT", "Deblender", "DeconICA", "DeconPeaker", "DeconRNASeq", "DSA", "dtangle", "EPIC", "FARDEEP", "LinDeconSeq", "MCPcounter", "MethylResolver", "MIXTURE", "MuSic", "MySort", "PREDE", "ReFACTor", "RNA-Sieve", "SCDC", "TOAST", "BseqSC")
+ALL_METHODS <- c(FAST_METHODS, SLOW_METHODS, EX_SLOW_METHODS)
 
 PATH_TO_MATLAB_LICENSE <- "/path/to/matlab/license.lic"
 
@@ -16,7 +14,7 @@ DOCKER_TAG_PREFIX <- "deconvolution/"
 DOCKER_TAG_SUFFIX <- ":latest"
 nRep <- 10
 
-dataFiles <- list.files('./data/sim') %>%
+dataFiles <- list.files('./data/sim-tsp') %>%
     str_match('([^/]+).rds$') %>%
     { function(x) x[, 2] }()
 allConfig <- expand.grid(dataset = dataFiles, method = methods, seed = seq(nRep), stringsAsFactors = F)
@@ -25,7 +23,7 @@ allConfig <- expand.grid(dataset = dataFiles, method = methods, seed = seq(nRep)
 dir.create('./results/consistency', showWarnings = F, recursive = T)
 res <- lapply(seq_len(nrow(allConfig)), function(i) {
     config <- allConfig[i,]
-    dataFile <- paste0('./data/sim/', as.character(config$dataset), '.rds')
+    dataFile <- paste0('./data/sim-tsp/', as.character(config$dataset), '.rds')
     method <- config$method
     seed <- config$seed
 
@@ -106,7 +104,7 @@ allRes <- lapply(seq_len(nrow(allConfig)), function(i) {
     seed <- config$seed
 
     resFile <- paste0('./results/consistency/', method, '_', config$dataset, '_', seed, '.rds')
-    dataFile <- paste0('./data/sim/', as.character(config$dataset), '.rds')
+    dataFile <- paste0('./data/sim-tsp/', as.character(config$dataset), '.rds')
 
     if (!file.exists(resFile)) {
         return(NULL)
