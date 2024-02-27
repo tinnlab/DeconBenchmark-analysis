@@ -12,7 +12,10 @@ To get started, follow the steps below:
 
 **_NOTE 01:_** Users can download the data from CELLxGENE database directly.The following table provides the list of datasets that we used in our analysis. Users can manually download the data by clicking to the link in the `Download URL` column. We also provides the URLs for users to explore the dataset, and the note on choosing the right dataset used in our analysis.
 
-**_NOTE 02:_** Please notice that these data are updated regularly, thus, it may make the repoduced results slightly different to the data deposited on Zenodo.
+**_NOTE 02:_** Please notice that these data are updated regularly, thus, it may make the rerpoduced results slightly different to the data deposited on Zenodo.
+
+**_NOTE 02:_** All simulated are also available at https://github.com/tinnlab/DeconBenchmark-data
+
 
 | Dataset                      | URL                                                                                | Download URL                                                                       | Note                                                  |
 |------------------------------|------------------------------------------------------------------------------------|------------------------------------------------------------------------------------|-------------------------------------------------------|
